@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>MoneyMate - Personal Finance Dashboard</title>
+
+<!-- FontAwesome for icons -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  rel="stylesheet"
+/>
+
+<!-- Chart.js CDN (stable) -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="style.css" />
+<style>
+ 
+</style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>💸 MoneyMate</h2>
+    <ul>
+      <li class="active" data-section="home"><i class="fas fa-home"></i> Home</li>
+      <li data-section="bills"><i class="fas fa-file-invoice-dollar"></i> Bills</li>
+      <li data-section="income"><i class="fas fa-money-bill-wave"></i> Income</li>
+      <li data-section="expenses"><i class="fas fa-credit-card"></i> Expenses</li>
+      <li data-section="records"><i class="fas fa-list"></i> Records</li>
+      <li id="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</li>
+    </ul>
+    <div class="logout-btn" id="logoutBtn">Logout <i class="fas fa-sign-out-alt"></i></div>
+  </div>
+
+  <div class="main">
+    <header>
+      <h1 id="sectionTitle">Finance Overview</h1>
+      <button id="addRecordBtn">➕ Add Record</button>
+    </header>
+
+    <!-- Sections -->
+    <section id="homeSection" class="content-section">
+      <div class="stats">
+        <div class="card"><h3>Total Income</h3><p id="totalIncome">$0.00</p></div>
+        <div class="card"><h3>Total Expenses</h3><p id="totalExpenses">$0.00</p></div>
+        <div class="card"><h3>Balance</h3><p id="balance">$0.00</p></div>
+      </div>
+      <canvas id="financeChart"></canvas>
+    </section>
+
+    <section id="billsSection" class="content-section" style="display:none">
+      <h2>Bills</h2>
+      <p><em>Filter to show only Bills</em></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Description</th><th>Amount</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="billsBody"></tbody>
+      </table>
+    </section>
+
+    <section id="incomeSection" class="content-section" style="display:none">
+      <h2>Income</h2>
+      <p><em>Filter to show only Income</em></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Description</th><th>Amount</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="incomeBody"></tbody>
+      </table>
+    </section>
+
+    <section id="expensesSection" class="content-section" style="display:none">
+      <h2>Expenses</h2>
+      <p><em>Filter to show only Expenses</em></p>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Description</th><th>Amount</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="expensesBody"></tbody>
+      </table>
+    </section>
+
+    <section id="recordsSection" class="content-section" style="display:none">
+      <h2>All Records</h2>
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search records..."
+        style="margin-bottom:1rem;"
+      />
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="recordsBody"></tbody>
+      </table>
+      <div style="margin-top:1rem;">
+        <button id="exportBtn">📤 Export Data</button>
+        <input type="file" id="importFile" />
+      </div>
+    </section>
+  </div>
+
+  <!-- Add/Edit Record Modal -->
+  <div class="modal" id="recordModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeRecordModal">&times;</span>
+      <h2 id="recordModalTitle">Add New Record</h2>
+      <input type="date" id="recordDate" />
+      <select id="recordType">
+        <option value="Income">Income</option>
+        <option value="Expense">Expense</option>
+        <option value="Bill">Bill</option>
+      </select>
+      <input type="text" id="recordDesc" placeholder="Description" />
+      <input type="number" id="recordAmount" placeholder="Amount" />
+      <button id="saveRecordBtn">Save</button>
+    </div>
+  </div>
+
+  <!-- Login/Register Modal -->
+  <div class="modal" id="authModal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeAuthModal">&times;</span>
+      <h2 id="authTitle">Login</h2>
+      <input type="email" id="authEmail" placeholder="Email" />
+      <input type="password" id="authPassword" placeholder="Password" />
+      <button id="authActionBtn">Login</button>
+      <p style="text-align:center; margin-top:1rem; font-size:0.9rem;">
+        <span id="toggleAuthText">Don't have an account?</span>
+        <a href="#" id="toggleAuthLink">Register here</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Firebase compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
